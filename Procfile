@@ -1,0 +1,1 @@
+﻿web: dotnet ./app/WebApplication2.dll
