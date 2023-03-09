@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      dotnet: 3.1
+      dotnet: 4.7.2
   pre_build:
     commands:
       - dotnet restore WebApplication2/WebApplication2.csproj
