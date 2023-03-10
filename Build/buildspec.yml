@@ -4,15 +4,24 @@ phases:
   install:
     runtime-versions:
       dotnet: 3.1
+    commands:
+      - echo Installing .NET Core 3.1 SDK
+      - sudo apt-get update
+      - sudo apt-get install -y apt-transport-https
+      - sudo apt-get update
+      - sudo apt-get install -y dotnet-sdk-3.1
   pre_build:
     commands:
-      - dotnet restore WebApplication2/WebApplication2.csproj
+      - echo Restoring dependencies
+      - dotnet restore
   build:
     commands:
-      - dotnet build WebApplication2/WebApplication2.csproj
+      - echo Building the project
+      - dotnet build
   post_build:
     commands:
-      - dotnet publish -c Release -o ./app/ WebApplication2/WebApplication2.csproj
+      - echo Publishing the project
+      - dotnet publish -c Release -o ./publish
 artifacts:
   files:
     - '**/*'
