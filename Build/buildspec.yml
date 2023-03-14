@@ -25,6 +25,7 @@ phases:
     commands:
       - echo Publishing the project
       - dotnet publish -c Release -o ./publish
+
 artifacts:
   files:
     - '**/*'
