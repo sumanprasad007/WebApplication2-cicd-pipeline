@@ -2,22 +2,27 @@ version: 0.2
 
 phases:
   pre_build:
+    # Install .NET Core 3.1
     commands:
       - echo Installing .NET Core 3.1...
-      - wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-      - sudo dpkg -i packages-microsoft-prod.deb
-      - sudo apt-get update
-      - sudo apt-get install -y dotnet-sdk-3.1
+      - Invoke-WebRequest -Uri https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
+      - .\dotnet-install.ps1 -Channel 3.1 --install-dir "$Env:ProgramFiles\dotnet" --no-path
+      # Add .NET Core 3.1 to the system PATH environment variable
+      - setx /M PATH $('{0};{1}' -f $Env:PATH, "$Env:ProgramFiles\dotnet")
   build:
+    # Restore NuGet packages and build the project
     commands:
       - echo Restoring NuGet packages...
       - dotnet restore WebApplication2/WebApplication2.csproj
       - echo Building project...
-      - dotnet build WebApplication2/WebApplication2.csproj /p:WebProjectImportedTargetsFile=/root/.dotnet/sdk/3.1.426/Microsoft/VisualStudio/v16.0/WebApplications/Microsoft.WebApplication.targets
+      # Set the path to the WebApplications target file
+      - dotnet build WebApplication2/WebApplication2.csproj /p:WebProjectImportedTargetsFile=/Program Files/dotnet/sdk/3.1.426/Microsoft/VisualStudio/v16.0/WebApplications/Microsoft.WebApplication.targets
   post_build:
+    # Run tests
     commands:
       - echo Running tests...
       - dotnet test WebApplication2.Tests/WebApplication2.Tests.csproj
 artifacts:
+  # Include all files in the build artifact
   files:
     - '**/*'
