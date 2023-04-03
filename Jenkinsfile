@@ -2,7 +2,6 @@ pipeline {
     agent {
         docker {
             image 'mcr.microsoft.com/windows/servercore:ltsc2019'
-            label 'windows'
             args '-u ContainerAdministrator'
         }
     }
