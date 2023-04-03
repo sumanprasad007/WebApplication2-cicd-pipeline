@@ -1,31 +1,32 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/dotnet/sdk:6.0-alpine'
-            args '-u root'
+            image 'mcr.microsoft.com/windows/servercore:ltsc2019'
+            label 'windows'
+            args '-u ContainerAdministrator'
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh 'dotnet restore'
-                sh 'dotnet build'
+                bat 'dotnet restore'
+                bat 'dotnet build'
             }
         }
         stage('Test') {
             steps {
-                sh 'dotnet test'
+                bat 'dotnet test'
             }
         }
         stage('Publish') {
             steps {
-                sh 'dotnet publish'
+                bat 'dotnet publish'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'docker build -t my-app .'
-                sh 'docker run -d --name my-app-container my-app'
+                bat 'docker build -t my-app .'
+                bat 'docker run -d --name my-app-container my-app'
             }
         }
     }
